@@ -2,29 +2,15 @@ name := "example-sbt"
 
 version := "1.0"
 
-scalaVersion := "2.12.15"
+crossScalaVersions := Seq("2.10.7", "2.11.8", "2.12.4")
 
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"
 
-libraryDependencies += "net.liftweb" % "lift-webkit_2.12" % "3.2.0-M3"
+libraryDependencies ++= { scalaBinaryVersion (sv => Seq(liftweb(sv))).value }
 
-libraryDependencies += "com.typesafe.play" % "play_2.12" % "2.6.7"
-
-// log4j 1.2.17: multiple critical CVEs (CVE-2019-17571, CVE-2020-9493)
-libraryDependencies += "log4j" % "log4j" % "1.2.17"
-
-// commons-collections 3.2.1: deserialization RCE (CVE-2015-6420)
-libraryDependencies += "commons-collections" % "commons-collections" % "3.2.1"
-
-// commons-codec for encoding utilities
-libraryDependencies += "commons-codec" % "commons-codec" % "1.11"
-
-// jackson-databind for JSON processing
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.10"
-
-// spring-core: CVE-2022-22965 (Spring4Shell)
-libraryDependencies += "org.springframework" % "spring-core" % "5.3.16"
-
-libraryDependencies += "org.scalatestplus.play" % "scalatestplus-play_2.12" % "3.1.2" % Test
-
-libraryDependencies += "org.mockito" % "mockito-core" % "4.11.0" % Test
+def liftweb(v: String) =
+  "net.liftweb" %% "lift-webkit" % (v match {
+    case "2.10" => "3.0-M1"
+    case "2.11" | "2.12"  => "3.2.0-M3"
+    case _ => sys.error(s"unrecognized binary version $v")
+  })
