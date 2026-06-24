@@ -29,5 +29,6 @@ jobs:
           cli-token: ${{ github.token }}
           log-level: debug
           ecosystems: scala
+          matchers: +scorecard
           fail-on: any
           comment-summary-in-pr: always
